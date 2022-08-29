@@ -16,8 +16,9 @@
 //==============================================================================
 /*
 */
-class PlayListComponent  : public juce::Component,
-                            public TableListBoxModel
+class PlayListComponent  :  public juce::Component,
+                            public TableListBoxModel,
+                            public Button::Listener
 {
 public:
     PlayListComponent();
@@ -25,10 +26,21 @@ public:
 
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    /** returns number of rows in a play list */
     int getNumRows () override;
+    
+    /** paints the background of a single row */
     void paintRowBackground (Graphics &, int rowNumber, int width, int height, bool rowIsSelected) override;
+    
+    /** to draw inside the row cell e.g. text  */
     void paintCell (Graphics &, int rowNumber, int columnId, int width, int height, bool rowIsSelected) override;
 
+    Component *  refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, Component *existingComponentToUpdate) override;
+    
+    /** need to write */
+    void buttonClicked(Button* ) override ;
+    
 private:
     TableListBox tableComponent;
     std::vector<std::string> trackTitles;

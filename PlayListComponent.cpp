@@ -16,11 +16,13 @@ PlayListComponent::PlayListComponent()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    tableComponent.getHeader().addColumn("Hello there", 1, int (200));
+    tableComponent.getHeader().addColumn("title", 1, int (400));
+    tableComponent.getHeader().addColumn("", 2, int (200));
     addAndMakeVisible(tableComponent);
     tableComponent.setModel(this);
     trackTitles.push_back("hello1");
     trackTitles.push_back("hello2");
+//    tableComponent.addComponentListener(this)
 }
 
 PlayListComponent::~PlayListComponent()
@@ -57,11 +59,34 @@ void PlayListComponent::paintRowBackground (Graphics & g, int rowNumber, int wid
     {
         g.fillAll(Colours::orange);
     }
-    else g.fillAll(Colours::darkgrey);
+    else g.fillAll(Colours::darkgoldenrod);
 }
 void PlayListComponent::paintCell (Graphics & g, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
 {
     g.drawText(trackTitles[rowNumber], 4, 0, width - 4, height, Justification::centredLeft, true);
+}
+
+Component *  PlayListComponent::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, Component *existingComponentToUpdate)
+{
+    if (columnId == 2)
+    {
+        if (existingComponentToUpdate == nullptr){
+            TextButton* btn = new TextButton{"play"};
+            String id{std::to_string(rowNumber)};
+            btn->setComponentID(id);
+            btn-> addListener(this);
+            existingComponentToUpdate = btn;
+        }
+    }
+    return existingComponentToUpdate;
+}
+
+
+void PlayListComponent::buttonClicked (Button * button)
+{
+    
+    int test = std::stoi(button->getComponentID().toStdString());
+    std::cout << test<< std::endl;
 }
 
 

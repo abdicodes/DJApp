@@ -27,7 +27,7 @@ public:
     void resized() override;
 
     void changeListenerCallback (ChangeBroadcaster *source) override;
-
+    /** loads URL to the audio file*/
     void loadURL(URL audioURL);
 
     /** set the relative position of the playhead*/

@@ -99,7 +99,6 @@ void WaveformDisplay::setPositionRelative(double pos)
 {
   if (pos != position && !isnan(pos) )
   {
-      std::cout << pos << std::endl;
     position = pos;
     repaint();
   }

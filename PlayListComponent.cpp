@@ -18,6 +18,7 @@ PlayListComponent::PlayListComponent()
     // initialise any special settings that your component needs.
     tableComponent.getHeader().addColumn("Hello there", 1, int (200));
     addAndMakeVisible(tableComponent);
+    tableComponent.setModel(this);
     trackTitles.push_back("hello1");
     trackTitles.push_back("hello2");
 }
@@ -50,13 +51,17 @@ int PlayListComponent::getNumRows ()
 {
     return int (trackTitles.size());
 }
-void PlayListComponent::paintRowBackground (Graphics &, int rowNumber, int width, int height, bool rowIsSelected)
+void PlayListComponent::paintRowBackground (Graphics & g, int rowNumber, int width, int height, bool rowIsSelected)
 {
-    
+    if (rowIsSelected)
+    {
+        g.fillAll(Colours::orange);
+    }
+    else g.fillAll(Colours::darkgrey);
 }
-void PlayListComponent::paintCell (Graphics &, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
+void PlayListComponent::paintCell (Graphics & g, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
 {
-    
+    g.drawText(trackTitles[rowNumber], 4, 0, width - 4, height, Justification::centredLeft, true);
 }
 
 

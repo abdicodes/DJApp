@@ -106,6 +106,8 @@ void DeckGUI::buttonClicked(Button* button)
         fChooser.launchAsync(fileChooserFlags, [this](const FileChooser& chooser)
         {
             player->loadURL(URL{chooser.getResult()});
+            std::cout << "Stop button was clicked " << std::endl;
+            
             // and now the waveformDisplay as well
             waveformDisplay.loadURL(URL{chooser.getResult()}); 
         });
@@ -154,15 +156,15 @@ void DeckGUI::filesDropped (const StringArray &files, int x, int y)
   std::cout << "DeckGUI::filesDropped" << std::endl;
   if (files.size() == 1)
   {
-    player->loadURL(URL{File{files[0]}});
+      player->loadURL(URL{File{files[0]}});
+      waveformDisplay.loadURL(URL{{File{files[0]}}});
   }
 }
 
 void DeckGUI::timerCallback()
 {
-    //std::cout << "DeckGUI::timerCallback" << std::endl;
     waveformDisplay.setPositionRelative(
-            player->getPositionRelative());
+    player->getPositionRelative());
 }
 
 

@@ -44,5 +44,6 @@ public:
 private:
     TableListBox tableComponent;
     std::vector<std::string> trackTitles;
+    TextButton loadButton{"LOAD"};
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlayListComponent)
 };

@@ -18,11 +18,16 @@ PlayListComponent::PlayListComponent()
     // initialise any special settings that your component needs.
     tableComponent.getHeader().addColumn("title", 1, int (400));
     tableComponent.getHeader().addColumn("", 2, int (200));
+    
     addAndMakeVisible(tableComponent);
+    addAndMakeVisible(loadButton);
+    
     tableComponent.setModel(this);
+    
     trackTitles.push_back("hello1");
     trackTitles.push_back("hello2");
-//    tableComponent.addComponentListener(this)
+    loadButton.setName("loadButton");
+    loadButton.addListener(this);
 }
 
 PlayListComponent::~PlayListComponent()
@@ -75,6 +80,7 @@ Component *  PlayListComponent::refreshComponentForCell (int rowNumber, int colu
             String id{std::to_string(rowNumber)};
             btn->setComponentID(id);
             btn-> addListener(this);
+           
             existingComponentToUpdate = btn;
         }
     }
@@ -85,14 +91,22 @@ Component *  PlayListComponent::refreshComponentForCell (int rowNumber, int colu
 void PlayListComponent::buttonClicked (Button * button)
 {
     
-    int test = std::stoi(button->getComponentID().toStdString());
-    std::cout << test<< std::endl;
+    if (button->getName() == "play")
+    {
+        std::cout << "play button is clicked" << std::endl;
+        int test = std::stoi(button->getComponentID().toStdString());
+         std::cout << test<< std::endl;
+    }
+    if (button->getName() == "loadButton") std::cout << "load button is clicked" << std::endl;
 }
 
 
 void PlayListComponent::resized()
 {
-    tableComponent.setBounds(0, 0, getWidth(), getHeight());
+    
+    loadButton.setBounds(0, 0, 50, 50);
+    
+    tableComponent.setBounds(0, 50, getWidth(), getHeight());
     // This method is where you should set the bounds of any child
     // components that your component contains..
 

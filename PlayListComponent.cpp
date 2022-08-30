@@ -97,9 +97,20 @@ void PlayListComponent::buttonClicked (Button * button)
         int test = std::stoi(button->getComponentID().toStdString());
          std::cout << test<< std::endl;
     }
-    if (button->getName() == "loadButton") std::cout << "load button is clicked" << std::endl;
+    if (button->getName() == "loadButton")
+    {
+        
+         auto fileChooserFlags1 =
+        FileBrowserComponent::canSelectFiles;
+        
+        auto fileChooserFlags2 = FileBrowserComponent::canSelectMultipleItems;
+        
+        fChooser.launchAsync(fileChooserFlags1 | fileChooserFlags2 , [this](const FileChooser& chooser)
+        {
+            playlist= chooser.getResults();
+        });
+    }
 }
-
 
 void PlayListComponent::resized()
 {

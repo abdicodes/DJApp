@@ -45,5 +45,7 @@ private:
     TableListBox tableComponent;
     std::vector<std::string> trackTitles;
     TextButton loadButton{"LOAD"};
+    FileChooser fChooser{"Select a file..."};
+    Array<File> playlist;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlayListComponent)
 };

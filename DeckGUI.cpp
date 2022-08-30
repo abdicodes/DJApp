@@ -101,9 +101,13 @@ void DeckGUI::buttonClicked(Button* button)
     }
        if (button == &loadButton)
     {
-        auto fileChooserFlags = 
+        auto fileChooserFlags =
         FileBrowserComponent::canSelectFiles;
-        fChooser.launchAsync(fileChooserFlags, [this](const FileChooser& chooser)
+        
+        auto fileChooserFlags2 = FileBrowserComponent::canSelectMultipleItems;
+        
+        
+        fChooser.launchAsync(fileChooserFlags2 | fileChooserFlags , [this](const FileChooser& chooser)
         {
             player->loadURL(URL{chooser.getResult()});
             std::cout << "Stop button was clicked " << std::endl;

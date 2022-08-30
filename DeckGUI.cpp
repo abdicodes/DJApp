@@ -172,5 +172,11 @@ void DeckGUI::timerCallback()
 }
 
 
+void DeckGUI::playFromList(File  file)
+{
+    player->loadURL(URL{file});
+    waveformDisplay.loadURL(URL{file});
+}
+
     
 

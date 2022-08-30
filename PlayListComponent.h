@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include <vector>
+#include "DeckGUI.h"
 
 //==============================================================================
 /*
@@ -21,7 +22,7 @@ class PlayListComponent  :  public juce::Component,
                             public Button::Listener
 {
 public:
-    PlayListComponent();
+    PlayListComponent(DeckGUI* , DeckGUI*);
     ~PlayListComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -47,5 +48,8 @@ private:
     TextButton loadButton{"LOAD"};
     FileChooser fChooser{"Select a file..."};
     Array<File> playlist;
+    DeckGUI* deckGUI1;
+    DeckGUI* deckGUI2;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlayListComponent)
 };

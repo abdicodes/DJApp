@@ -180,3 +180,22 @@ void PlayListComponent::resized()
     // components that your component contains..
 }
 
+
+bool PlayListComponent::isInterestedInFileDrag (const StringArray &files)
+{
+  std::cout << "DeckGUI::isInterestedInFileDrag" << std::endl;
+  return true;
+}
+
+void PlayListComponent::filesDropped (const StringArray &files, int x, int y)
+{
+  std::cout << "DeckGUI::filesDropped" << std::endl;
+    for (const String & file :  files)
+    {
+        
+        //convert to File then add to playList
+        playlist.add(File{file});
+    }
+    tableComponent.updateContent();
+}
+

@@ -19,7 +19,8 @@
 */
 class PlayListComponent  :  public juce::Component,
                             public TableListBoxModel,
-                            public Button::Listener
+                            public Button::Listener,
+                            public FileDragAndDropTarget
 {
 public:
     PlayListComponent(DeckGUI* , DeckGUI*);
@@ -41,6 +42,10 @@ public:
     
     /** need to write */
     void buttonClicked(Button* ) override ;
+    
+    /** need to write */
+    bool isInterestedInFileDrag (const StringArray &files) override;
+    void filesDropped (const StringArray &files, int x, int y) override;
     
 private:
     TableListBox tableComponent;

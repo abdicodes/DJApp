@@ -20,20 +20,15 @@ PlayListComponent::PlayListComponent(DeckGUI* _deckGUI1,DeckGUI* _deckGUI2 ): de
     tableComponent.getHeader().addColumn(" Deck 1", 2, int (150));
     tableComponent.getHeader().addColumn(" Deck2", 3, int (150));
     tableComponent.getHeader().addColumn(" Delete", 4, int (150));
-
-
+    tableComponent.setModel(this);
 
     addAndMakeVisible(tableComponent);
     addAndMakeVisible(loadButton);
-    
-    tableComponent.setModel(this);
-    
-    trackTitles.push_back("hello1");
-    trackTitles.push_back("hello2");
+    addAndMakeVisible(saveButton);
+   
     loadButton.setName("loadButton");
+    saveButton.setName("saveButton");
     loadButton.addListener(this);
-    
-    
 }
 
 PlayListComponent::~PlayListComponent()
@@ -74,9 +69,6 @@ void PlayListComponent::paintRowBackground (Graphics & g, int rowNumber, int wid
 }
 void PlayListComponent::paintCell (Graphics & g, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
 {
-    std::cout << " PlayListComponent::paintCell row: " << rowNumber << std::endl;
-   
-//    g.drawText(trackTitles[rowNumber], 4, 0, width - 4, height, Justification::centredLeft, true);
     g.drawText(playlist[rowNumber].getFileName(), 4, 0, width - 4, height, Justification::centredLeft, true);
 }
 
@@ -144,25 +136,20 @@ void PlayListComponent::buttonClicked (Button * button)
     
    else if (button->getName() == "play in Deck1")
     {
-        std::cout << "play1 button is clicked" << std::endl;
         int songID = std::stoi(button->getComponentID().toStdString()) - 1000;
-         std::cout << songID<< std::endl;
         deckGUI1->playFromList(playlist[songID]);
         
     }
     
    else if (button->getName() == "play in Deck2")
     {
-        std::cout << "play2 button is clicked" << std::endl;
         int songID =  std::stoi(button->getComponentID().toStdString()) - 2000;
-         std::cout << songID<< std::endl;
         deckGUI2->playFromList(playlist[songID]);
     }
     
    else   if (button->getName() == "Remove")
     {
         tableComponent.deselectAllRows();
-        std::cout << "remove button is clicked" << std::endl;
         int songID =  std::stoi(button->getComponentID().toStdString()) - 3000;
         playlist.remove(songID);
         tableComponent.updateContent();
@@ -173,7 +160,8 @@ void PlayListComponent::buttonClicked (Button * button)
 void PlayListComponent::resized()
 {
     
-    loadButton.setBounds(0, 0, 50, 50);
+    loadButton.setBounds(0, 0, 200, 50);
+    saveButton.setBounds(getWidth() - 200, 0, 200, 50);
     
     tableComponent.setBounds(0, 50, getWidth(), getHeight());
     // This method is where you should set the bounds of any child
@@ -183,13 +171,11 @@ void PlayListComponent::resized()
 
 bool PlayListComponent::isInterestedInFileDrag (const StringArray &files)
 {
-  std::cout << "DeckGUI::isInterestedInFileDrag" << std::endl;
   return true;
 }
 
 void PlayListComponent::filesDropped (const StringArray &files, int x, int y)
 {
-  std::cout << "DeckGUI::filesDropped" << std::endl;
     for (const String & file :  files)
     {
         

@@ -49,8 +49,8 @@ public:
     
 private:
     TableListBox tableComponent;
-    std::vector<std::string> trackTitles;
-    TextButton loadButton{"LOAD"};
+    TextButton loadButton{"IMPORT AUDIO FILES"};
+    TextButton saveButton{"SAVE PLAYLIST"};
     FileChooser fChooser{"Select a file..."};
     Array<File> playlist;
     DeckGUI* deckGUI1;

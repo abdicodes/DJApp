@@ -13,6 +13,8 @@
 #include <JuceHeader.h>
 #include <vector>
 #include "DeckGUI.h"
+#include <iostream>
+#include <fstream>
 
 //==============================================================================
 /*
@@ -49,12 +51,13 @@ public:
     
 private:
     TableListBox tableComponent;
-    TextButton loadButton{"IMPORT AUDIO FILES"};
+    TextButton loadButton{"+ IMPORT AUDIO FILES"};
     TextButton saveButton{"SAVE PLAYLIST"};
     FileChooser fChooser{"Select a file..."};
     Array<File> playlist;
     DeckGUI* deckGUI1;
     DeckGUI* deckGUI2;
+    std::ofstream myfile;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlayListComponent)
 };

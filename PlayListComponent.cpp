@@ -29,10 +29,22 @@ PlayListComponent::PlayListComponent(DeckGUI* _deckGUI1,DeckGUI* _deckGUI2 ): de
     loadButton.setName("loadButton");
     saveButton.setName("saveButton");
     loadButton.addListener(this);
+    saveButton.addListener(this);
+    
+    auto filePath = File::getSpecialLocation (File::SpecialLocationType::userHomeDirectory).getChildFile ("playlist.txt");
+    std::string line;
+    
+    
+    std::ifstream MyReadFile(filePath.File::getFullPathName().toRawUTF8());
+    while (getline(MyReadFile,line))
+    {
+        playlist.add(File(line));
+    }
 }
 
 PlayListComponent::~PlayListComponent()
 {
+    
 }
 
 void PlayListComponent::paint (juce::Graphics& g)
@@ -145,6 +157,20 @@ void PlayListComponent::buttonClicked (Button * button)
     {
         int songID =  std::stoi(button->getComponentID().toStdString()) - 2000;
         deckGUI2->playFromList(playlist[songID]);
+    }
+    
+    else if ( button ->getName() == "saveButton")
+    {
+        auto filePath = File::getSpecialLocation (File::SpecialLocationType::userHomeDirectory).getChildFile ("playlist.txt");
+        myfile.open(filePath.File::getFullPathName().toRawUTF8());
+        
+        for (const File& file:playlist )
+        {
+            std::cout << file.getFullPathName() << std::endl;
+            myfile <<file.getFullPathName() << std::endl;
+        }
+      
+        myfile.close();
     }
     
    else   if (button->getName() == "Remove")

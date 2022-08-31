@@ -35,11 +35,20 @@ PlayListComponent::PlayListComponent(DeckGUI* _deckGUI1,DeckGUI* _deckGUI2 ): de
     std::string line;
     
     
-    std::ifstream MyReadFile(filePath.File::getFullPathName().toRawUTF8());
-    while (getline(MyReadFile,line))
+    std::ifstream playListFile(filePath.File::getFullPathName().toRawUTF8());
+    
+    //defensive coding just in case there is issue opening file stream
+    if ( playListFile.is_open())
     {
-        playlist.add(File(line));
+        while (getline(playListFile,line))
+        {
+            playlist.add(File(line));
+        }
+        playListFile.close();
     }
+    
+    else std::cout << " ERROR: playlist file can't be opened!" << std::endl;
+    
 }
 
 PlayListComponent::~PlayListComponent()
@@ -164,13 +173,18 @@ void PlayListComponent::buttonClicked (Button * button)
         auto filePath = File::getSpecialLocation (File::SpecialLocationType::userHomeDirectory).getChildFile ("playlist.txt");
         myfile.open(filePath.File::getFullPathName().toRawUTF8());
         
-        for (const File& file:playlist )
-        {
-            std::cout << file.getFullPathName() << std::endl;
-            myfile <<file.getFullPathName() << std::endl;
+        if (myfile.is_open()) {
+            for (const File& file:playlist )
+            {
+                std::cout << file.getFullPathName() << std::endl;
+                myfile <<file.getFullPathName() << std::endl;
+            }
+            
+            myfile.close();
         }
-      
-        myfile.close();
+        
+        else std::cout << "ERROR playlist file can't be written on! check your access rules!";
+  
     }
     
    else   if (button->getName() == "Remove")

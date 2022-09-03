@@ -16,10 +16,10 @@ PlayListComponent::PlayListComponent(DeckGUI* _deckGUI1,DeckGUI* _deckGUI2 ): de
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    tableComponent.getHeader().addColumn("Audio Title", 1, int (400));
-    tableComponent.getHeader().addColumn(" Deck 1", 2, int (150));
-    tableComponent.getHeader().addColumn(" Deck2", 3, int (150));
-    tableComponent.getHeader().addColumn(" Delete", 4, int (150));
+    tableComponent.getHeader().addColumn("Track Title", 1, int (400));
+    tableComponent.getHeader().addColumn(" ", 2, int (150));
+    tableComponent.getHeader().addColumn(" ", 3, int (150));
+    tableComponent.getHeader().addColumn(" ", 4, int (150));
     tableComponent.setModel(this);
 
     addAndMakeVisible(tableComponent);
@@ -71,7 +71,7 @@ void PlayListComponent::paint (juce::Graphics& g)
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
     g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
+    g.setFont (12.0f);
     g.drawText ("PlayListComponent", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
 }
@@ -82,6 +82,7 @@ int PlayListComponent::getNumRows ()
 }
 void PlayListComponent::paintRowBackground (Graphics & g, int rowNumber, int width, int height, bool rowIsSelected)
 {
+    
     if (rowIsSelected)
     {
         g.fillAll(Colours::orange);
@@ -159,6 +160,7 @@ void PlayListComponent::buttonClicked (Button * button)
     {
         int songID = std::stoi(button->getComponentID().toStdString()) - 1000;
         deckGUI1->playFromList(playlist[songID]);
+        deckGUI1->setPos(0.0);
         
     }
     
@@ -200,10 +202,10 @@ void PlayListComponent::buttonClicked (Button * button)
 void PlayListComponent::resized()
 {
     
-    loadButton.setBounds(0, 0, 200, 50);
-    saveButton.setBounds(getWidth() - 200, 0, 200, 50);
+    loadButton.setBounds(0, 0, 150, 25);
+    saveButton.setBounds(getWidth() - 100, 0, 100, 25);
     
-    tableComponent.setBounds(0, 50, getWidth(), getHeight());
+    tableComponent.setBounds(0, 25, getWidth(), getHeight());
     // This method is where you should set the bounds of any child
     // components that your component contains..
 }

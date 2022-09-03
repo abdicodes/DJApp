@@ -44,6 +44,8 @@ public:
     void timerCallback() override;
     
     void playFromList(File) ;
+    
+    void setPos(double );
 
 private:
 

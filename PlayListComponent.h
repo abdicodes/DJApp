@@ -51,7 +51,7 @@ public:
     
 private:
     TableListBox tableComponent;
-    TextButton loadButton{"+ IMPORT AUDIO FILES"};
+    TextButton loadButton{"IMPORT PLAYLIST"};
     TextButton saveButton{"SAVE PLAYLIST"};
     FileChooser fChooser{"Select a file..."};
     Array<File> playlist;

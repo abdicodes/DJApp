@@ -19,8 +19,6 @@ PlayListComponent::PlayListComponent(DJAudioPlayer* _player, DeckGUI* _deckGUI1,
     tableComponent.getHeader().addColumn("Track Title", 1, int (150));
     tableComponent.getHeader().addColumn("File Path", 2, int (150));
     tableComponent.getHeader().addColumn("Duration", 3, int (100));
-    
-    
     tableComponent.getHeader().addColumn(" ", 4, int (110));
     tableComponent.getHeader().addColumn(" ", 5, int (110));
     tableComponent.getHeader().addColumn(" ", 6, int (100));
@@ -29,11 +27,15 @@ PlayListComponent::PlayListComponent(DJAudioPlayer* _player, DeckGUI* _deckGUI1,
     addAndMakeVisible(tableComponent);
     addAndMakeVisible(loadButton);
     addAndMakeVisible(saveButton);
+    addAndMakeVisible(searchBar);
    
     loadButton.setName("loadButton");
     saveButton.setName("saveButton");
     loadButton.addListener(this);
     saveButton.addListener(this);
+    searchBar.addListener(this);
+    searchBar.setTextToShowWhenEmpty("Search tracks...", juce::Colours::grey);
+    searchBar.onReturnKey = [this] { search(searchBar.getText()); };
     
     auto filePath = File::getSpecialLocation (File::SpecialLocationType::userHomeDirectory).getChildFile ("playlist.txt");
     std::string line;
@@ -217,11 +219,13 @@ void PlayListComponent::buttonClicked (Button * button)
 
 void PlayListComponent::resized()
 {
-    
-    loadButton.setBounds(0, 0, 150, 25);
+    double buttonWidth = getWidth() / 8;
+    double componentHight = getHeight() / 8;
+    loadButton.setBounds(0, 0, buttonWidth, componentHight);
     saveButton.setBounds(getWidth() - 100, 0, 100, 25);
+    searchBar.setBounds(buttonWidth + 2, 0, buttonWidth * 6 - 4, componentHight);
     
-    tableComponent.setBounds(0, 25, getWidth(), getHeight());
+    tableComponent.setBounds(0, componentHight, getWidth(), getHeight() - componentHight);
     // This method is where you should set the bounds of any child
     // components that your component contains..
 }
@@ -258,4 +262,15 @@ std::string PlayListComponent::getDuration(File file)
     }
     else return "";
 }
-    
+void PlayListComponent::search(String val){
+    if (val != "") {
+        for (int i = 0;i < playlist.size();i++) {
+            if (playlist[i].getFileName().contains(val)) {
+                tableComponent.selectRow(i);
+            }
+        }
+    }
+    else {
+        tableComponent.deselectAllRows();
+    }
+}

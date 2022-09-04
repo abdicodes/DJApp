@@ -23,6 +23,7 @@
 class PlayListComponent  :  public juce::Component,
                             public TableListBoxModel,
                             public Button::Listener,
+                            public TextEditor::Listener,
                             public FileDragAndDropTarget
 {
 public:
@@ -51,6 +52,8 @@ public:
     bool isInterestedInFileDrag (const StringArray &files) override;
     void filesDropped (const StringArray &files, int x, int y) override;
     
+    void search(String);
+    
     std::string getDuration(File);
 
     
@@ -66,6 +69,7 @@ private:
     DeckGUI* deckGUI2; // pointer to deckGUI2 instance
     DJAudioPlayer* player;
     std::ofstream myfile; // to save playlist in text file
+    TextEditor searchBar;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlayListComponent)
 };

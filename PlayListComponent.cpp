@@ -12,16 +12,18 @@
 #include "PlayListComponent.h"
 
 //==============================================================================
-PlayListComponent::PlayListComponent(DeckGUI* _deckGUI1,DeckGUI* _deckGUI2 ): deckGUI1(_deckGUI1),deckGUI2(_deckGUI2)
+PlayListComponent::PlayListComponent(DJAudioPlayer* _player, DeckGUI* _deckGUI1,DeckGUI* _deckGUI2 ): deckGUI1(_deckGUI1),deckGUI2(_deckGUI2), player(_player)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    tableComponent.getHeader().addColumn("Track Title", 1, int (200));
-    tableComponent.getHeader().addColumn("File Path", 2, int (200));
+    tableComponent.getHeader().addColumn("Track Title", 1, int (150));
+    tableComponent.getHeader().addColumn("File Path", 2, int (150));
+    tableComponent.getHeader().addColumn("Duration", 3, int (100));
     
-    tableComponent.getHeader().addColumn(" ", 3, int (130));
-    tableComponent.getHeader().addColumn(" ", 4, int (130));
-    tableComponent.getHeader().addColumn(" ", 5, int (120));
+    
+    tableComponent.getHeader().addColumn(" ", 4, int (110));
+    tableComponent.getHeader().addColumn(" ", 5, int (110));
+    tableComponent.getHeader().addColumn(" ", 6, int (100));
     tableComponent.setModel(this);
 
     addAndMakeVisible(tableComponent);
@@ -97,7 +99,12 @@ void PlayListComponent::paintCell (Graphics & g, int rowNumber, int columnId, in
 //    g.drawText(playlist[rowNumber].getFullPathName(), 4, 0, width - 4, height, Justification::centredLeft, true);
     
    
-   if ( columnId == 2) g.drawText(playlist[rowNumber].getFullPathName(), 4, 0, width - 4, height, Justification::centredLeft, true);
+    if ( columnId == 2) g.drawText(playlist[rowNumber].getFullPathName(), 4, 0, width - 4, height, Justification::centredLeft, true);
+    
+    if ( columnId == 3)
+    {
+        g.drawText(getDuration(playlist[rowNumber]), 4, 0, width - 4, height, Justification::centredLeft, true);
+    }
    
     
     
@@ -107,7 +114,7 @@ Component *  PlayListComponent::refreshComponentForCell (int rowNumber, int colu
 {
     if (rowNumber == playlist.size()) return nullptr;
     
-    if (columnId == 3)
+    if (columnId == 4)
     {
         
         if (existingComponentToUpdate == nullptr){
@@ -120,7 +127,7 @@ Component *  PlayListComponent::refreshComponentForCell (int rowNumber, int colu
         }
     }
     
-    if (columnId == 4)
+    if (columnId == 5)
     {
         if (existingComponentToUpdate == nullptr){
             TextButton* btn = new TextButton{"play in Deck2"};
@@ -132,7 +139,7 @@ Component *  PlayListComponent::refreshComponentForCell (int rowNumber, int colu
         }
     }
     
-    if (columnId == 5)
+    if (columnId == 6)
     {
         if (existingComponentToUpdate == nullptr){
             TextButton* btn = new TextButton{"Remove"};
@@ -236,3 +243,19 @@ void PlayListComponent::filesDropped (const StringArray &files, int x, int y)
     tableComponent.updateContent();
 }
 
+
+std::string PlayListComponent::getDuration(File file)
+
+{
+    if (file.exists())
+    {
+        
+        player->loadURL(URL(file));
+        
+        std::string output = player->getDuration();
+        std::cout << output << std::endl;
+        return output;
+    }
+    else return "";
+}
+    

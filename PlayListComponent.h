@@ -15,6 +15,7 @@
 #include "DeckGUI.h"
 #include <iostream>
 #include <fstream>
+#include "DJAudioPlayer.h"
 
 //==============================================================================
 /*
@@ -25,9 +26,10 @@ class PlayListComponent  :  public juce::Component,
                             public FileDragAndDropTarget
 {
 public:
-    PlayListComponent(DeckGUI* , DeckGUI*);
+    PlayListComponent(DJAudioPlayer*, DeckGUI* , DeckGUI*);
     ~PlayListComponent() override;
 
+    // functions responsible for drawing of the UI
     void paint (juce::Graphics&) override;
     void resized() override;
     
@@ -42,22 +44,28 @@ public:
 
     Component *  refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, Component *existingComponentToUpdate) override;
     
-    /** need to write */
+    /** event listener that listens to user clicks within the playlist GUI */
     void buttonClicked(Button* ) override ;
     
-    /** need to write */
+    /** adding the functionality of draging and dropping files into the playlist*/
     bool isInterestedInFileDrag (const StringArray &files) override;
     void filesDropped (const StringArray &files, int x, int y) override;
     
+    std::string getDuration(File);
+
+    
 private:
+    AudioFormatManager formatManager;
+    DJAudioPlayer tempPlayer{formatManager};
     TableListBox tableComponent;
-    TextButton loadButton{"IMPORT PLAYLIST"};
-    TextButton saveButton{"SAVE PLAYLIST"};
+    TextButton loadButton{"IMPORT PLAYLIST"};  // button that imports playlist from the local drive
+    TextButton saveButton{"SAVE PLAYLIST"};  // save the current playlist to be retrieved upon the launch of the file
     FileChooser fChooser{"Select a file..."};
     Array<File> playlist;
-    DeckGUI* deckGUI1;
-    DeckGUI* deckGUI2;
-    std::ofstream myfile;
+    DeckGUI* deckGUI1; // pointer to deckGUI1 instance
+    DeckGUI* deckGUI2; // pointer to deckGUI2 instance
+    DJAudioPlayer* player;
+    std::ofstream myfile; // to save playlist in text file
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlayListComponent)
 };

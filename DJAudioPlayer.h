@@ -36,7 +36,7 @@ class DJAudioPlayer : public AudioSource {
     double getPositionRelative();
     double getCurrentPosition();
     double getTotalLength();
-
+    std::string getDuration();
 private:
     AudioFormatManager& formatManager;
     std::unique_ptr<AudioFormatReaderSource> readerSource;

@@ -46,11 +46,13 @@ private:
     DeckGUI deckGUI1{&player1, formatManager, thumbCache}; 
 
     DJAudioPlayer player2{formatManager};
-    DeckGUI deckGUI2{&player2, formatManager, thumbCache}; 
+    DeckGUI deckGUI2{&player2, formatManager, thumbCache};
+    
+    DJAudioPlayer player3{formatManager};
 
     MixerAudioSource mixerSource;
     
-    PlayListComponent playListComponent{&deckGUI1, &deckGUI2};
+    PlayListComponent playListComponent{&player3,&deckGUI1, &deckGUI2};
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)

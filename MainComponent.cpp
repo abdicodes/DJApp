@@ -32,7 +32,6 @@ MainComponent::MainComponent()
     addAndMakeVisible(deckGUI2);
     addAndMakeVisible(playListComponent);
 
-
     formatManager.registerBasicFormats();
 }
 
@@ -52,6 +51,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
     mixerSource.addInputSource(&player1, false);
     mixerSource.addInputSource(&player2, false);
+    mixerSource.addInputSource(&player3, false);
 
  }
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
@@ -67,6 +67,7 @@ void MainComponent::releaseResources()
     // For more details, see the help for AudioProcessor::releaseResources()
     player1.releaseResources();
     player2.releaseResources();
+    player3.releaseResources();
     mixerSource.releaseResources();
 }
 
@@ -81,9 +82,11 @@ void MainComponent::paint (Graphics& g)
 
 void MainComponent::resized()
 {
-    deckGUI1.setBounds(0, 0, getWidth()/2, getHeight() / 2);
-    deckGUI2.setBounds(getWidth()/2, 0, getWidth()/2, getHeight() / 2);
-    playListComponent.setBounds(0, getHeight()/2, getWidth(), getHeight()/2);
+    double deckHight = getHeight() - getHeight()/2.5;
+    double playlistHight = getHeight()  - deckHight;
+    deckGUI1.setBounds(0, 0, getWidth()/2, deckHight);
+    deckGUI2.setBounds(getWidth()/2, 0, getWidth()/2, deckHight);
+    playListComponent.setBounds(0, deckHight, getWidth(), playlistHight);
     
 
 }

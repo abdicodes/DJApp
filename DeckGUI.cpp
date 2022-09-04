@@ -73,6 +73,9 @@ void DeckGUI::paint (Graphics& g)
     */
 
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));   // clear the background
+    
+    g.fillAll (juce::Colours::black);   // clear the background
+
 
     g.setColour (Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
@@ -101,8 +104,8 @@ void DeckGUI::resized()
     waveformDisplay.setBounds(0, rowH * 6, getWidth(), rowH * 2);
 //    loadButton.setBounds(0, rowH * 7, getWidth(), rowH);
     
-    elapsedTimeButton.setBounds(5, rowH, margin , rowH);
-    remainingTimeButton.setBounds(getWidth() - margin - 5, rowH, margin, rowH);
+    elapsedTimeButton.setBounds(5, rowH + rowH * 0.2, margin , rowH * 0.6);
+    remainingTimeButton.setBounds(getWidth() - margin - 5, rowH + rowH * 0.2, margin, rowH * 0.6);
 
 }
 
@@ -187,7 +190,7 @@ void DeckGUI::timerCallback()
 
 
 
-/** need to write */
+/** takes File object as an argument and plays the file by dereferencing loadURL function in DJAudioPlayer  */
 void DeckGUI::playFromList(File  file)
 {
     player->loadURL(URL{file});
@@ -234,8 +237,6 @@ std::string DeckGUI::getRemainingTime()
     
     if ( min < 10) minutes = "0"+minutes;
     if ( sec < 10) seconds = "0"+seconds;
-    
-    
     
     return minutes + " : " + seconds;
 }

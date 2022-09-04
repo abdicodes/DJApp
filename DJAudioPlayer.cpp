@@ -62,9 +62,9 @@ void DJAudioPlayer::setSpeed(double ratio)
 {
 
     // If ratio is 0 it will crash the program according to assersion that sets it to be > 0 
-  if (ratio <= 0 || ratio > 100.0)
+  if (ratio <= 0 || ratio > 2.0)
     {
-        std::cout << "DJAudioPlayer::setSpeed ratio should be between 0 and 100" << std::endl;
+        std::cout << "DJAudioPlayer::setSpeed ratio should be between 0 and 2" << std::endl;
     }
     else {
         resampleSource.setResamplingRatio(ratio);
@@ -110,4 +110,23 @@ double DJAudioPlayer::getCurrentPosition()
 double DJAudioPlayer::getTotalLength()
 {
     return transportSource.getLengthInSeconds();
+}
+
+
+std::string DJAudioPlayer::getDuration()
+
+{
+    int totalSeconds = std::floor(transportSource.getLengthInSeconds());
+    
+    // minutes and seconds from start of stream
+    int sec = totalSeconds % 60;
+    int min = totalSeconds / 60;
+    
+    std::string minutes =std::to_string(min) ;
+    std::string seconds =std::to_string(sec) ;
+    
+    if ( min < 10) minutes = "0"+minutes;
+    if ( sec < 10) seconds = "0"+seconds;
+    
+    return minutes + ":" + seconds;
 }

@@ -19,6 +19,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
                waveformDisplay(formatManagerToUse, cacheToUse)
 {
 
+    
     playButton.addListener(this);
     stopButton.addListener(this);
     loadButton.addListener(this);
@@ -39,6 +40,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     speedSlider.setValue(1.0);
     
     posSlider.setRange(0.0, 1.0);
+    posSlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 1, 1);
     
 
     startTimer(500);
@@ -49,6 +51,9 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     addAndMakeVisible(volSlider);
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(posSlider);
+    
+    addAndMakeVisible(elapsedTimeButton);
+    addAndMakeVisible(remainingTimeButton);
 
 
 }
@@ -85,15 +90,19 @@ void DeckGUI::resized()
     double rotarySliderHeight = getHeight()/2;
     double rowH = getHeight() / 8;
     double colW = getWidth() / 3 ;
+    double margin = getWidth()/ 6;
     playButton.setBounds(0, 0, colW, rowH);
     stopButton.setBounds(colW, 0, colW, rowH);
     
-    posSlider.setBounds(0, rowH * 1, getWidth(), rowH);
+    posSlider.setBounds(0 + margin, rowH * 1 , getWidth() - margin * 2, rowH);
     speedSlider.setBounds(getWidth() -  rotarySliderWidth, rowH * 2, rotarySliderWidth, rotarySliderHeight);
     volSlider.setBounds(0, rowH * 2, rotarySliderWidth, rotarySliderHeight);
     
     waveformDisplay.setBounds(0, rowH * 6, getWidth(), rowH * 2);
 //    loadButton.setBounds(0, rowH * 7, getWidth(), rowH);
+    
+    elapsedTimeButton.setBounds(5, rowH, margin , rowH);
+    remainingTimeButton.setBounds(getWidth() - margin - 5, rowH, margin, rowH);
 
 }
 
@@ -127,18 +136,6 @@ void DeckGUI::buttonClicked(Button* button)
             waveformDisplay.loadURL(URL{chooser.getResult()}); 
         });
     }
-    // if (button == &loadButton)
-    // {
-    //     FileChooser chooser{"Select a file..."};
-    //     if (chooser.browseForFileToOpen())
-    //     {
-    //         player->loadURL(URL{chooser.getResult()});
-    //         waveformDisplay.loadURL(URL{chooser.getResult()});
-            
-    //     }
-
-
-    // }
 }
 
 void DeckGUI::sliderValueChanged (Slider *slider)
@@ -178,13 +175,14 @@ void DeckGUI::filesDropped (const StringArray &files, int x, int y)
 
 void DeckGUI::timerCallback()
 {
-    waveformDisplay.setPositionRelative(
-    player->getPositionRelative());
+    waveformDisplay.setPositionRelative(player->getPositionRelative());
+   
+    if (!isnan(player->getPositionRelative())) posSlider.setValue(player->getPositionRelative());
     
-    if    (!isnan(player->getPositionRelative())) posSlider.setValue(player->getPositionRelative());
-        
+    elapsedTimeButton.setButtonText(getElapsedTime());
+    remainingTimeButton.setButtonText(getRemainingTime());
+                                    
     
-//    posSlider.setValue(player->getPositionRelative());
 }
 
 
@@ -196,10 +194,50 @@ void DeckGUI::playFromList(File  file)
     waveformDisplay.loadURL(URL{file});
 }
 
-void DeckGUI::setPos(double val)
+std::string DeckGUI::getElapsedTime()
 
 {
-    posSlider.setValue(val);
+    int current = 0;
+    if (!isnan(player->getTotalLength()))
+        {
+            current += std::floor(player->getCurrentPosition());
+        }
+    
+    // minutes and seconds from start of stream
+    int sec = current % 60;
+    int min = current / 60;
+    std::string minutes =std::to_string(min) ;
+    std::string seconds =std::to_string(sec) ;
+    
+    if ( min < 10) minutes = "0"+minutes;
+    if ( sec < 10) seconds = "0"+seconds;
+    
+    return minutes + " : " + seconds;
+}
+
+std::string DeckGUI::getRemainingTime()
+
+{
+    int remainingSeconds = 0;
+    if (!isnan(player->getTotalLength()))
+        {
+            remainingSeconds = std::floor(player->getTotalLength() -  player->getCurrentPosition());
+        }
+    
+    
+    // minutes and seconds from start of stream
+    int sec = remainingSeconds % 60;
+    int min = remainingSeconds / 60;
+    
+    std::string minutes =std::to_string(min) ;
+    std::string seconds =std::to_string(sec) ;
+    
+    if ( min < 10) minutes = "0"+minutes;
+    if ( sec < 10) seconds = "0"+seconds;
+    
+    
+    
+    return minutes + " : " + seconds;
 }
     
 

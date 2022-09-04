@@ -45,13 +45,16 @@ public:
     
     void playFromList(File) ;
     
-    void setPos(double );
+    std::string getElapsedTime();
+    std::string getRemainingTime();
 
 private:
 
     TextButton playButton{"PLAY"};
     TextButton stopButton{"STOP"};
     TextButton loadButton{"LOAD"};
+    TextButton elapsedTimeButton{"Elapsed"};
+    TextButton remainingTimeButton{"Remaining"};
   
     Slider volSlider; 
     Slider speedSlider;

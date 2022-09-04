@@ -16,10 +16,12 @@ PlayListComponent::PlayListComponent(DeckGUI* _deckGUI1,DeckGUI* _deckGUI2 ): de
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    tableComponent.getHeader().addColumn("Track Title", 1, int (400));
-    tableComponent.getHeader().addColumn(" ", 2, int (150));
-    tableComponent.getHeader().addColumn(" ", 3, int (150));
-    tableComponent.getHeader().addColumn(" ", 4, int (150));
+    tableComponent.getHeader().addColumn("Track Title", 1, int (200));
+    tableComponent.getHeader().addColumn("File Path", 2, int (200));
+    
+    tableComponent.getHeader().addColumn(" ", 3, int (130));
+    tableComponent.getHeader().addColumn(" ", 4, int (130));
+    tableComponent.getHeader().addColumn(" ", 5, int (120));
     tableComponent.setModel(this);
 
     addAndMakeVisible(tableComponent);
@@ -91,13 +93,21 @@ void PlayListComponent::paintRowBackground (Graphics & g, int rowNumber, int wid
 }
 void PlayListComponent::paintCell (Graphics & g, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
 {
-    g.drawText(playlist[rowNumber].getFileName(), 4, 0, width - 4, height, Justification::centredLeft, true);
+    if (columnId == 1)  g.drawText(playlist[rowNumber].getFileName(), 4, 0, width - 4, height, Justification::centredLeft, true);
+//    g.drawText(playlist[rowNumber].getFullPathName(), 4, 0, width - 4, height, Justification::centredLeft, true);
+    
+   
+   if ( columnId == 2) g.drawText(playlist[rowNumber].getFullPathName(), 4, 0, width - 4, height, Justification::centredLeft, true);
+   
+    
+    
 }
 
 Component *  PlayListComponent::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, Component *existingComponentToUpdate)
 {
     if (rowNumber == playlist.size()) return nullptr;
-    if (columnId == 2)
+    
+    if (columnId == 3)
     {
         
         if (existingComponentToUpdate == nullptr){
@@ -110,7 +120,7 @@ Component *  PlayListComponent::refreshComponentForCell (int rowNumber, int colu
         }
     }
     
-    if (columnId == 3)
+    if (columnId == 4)
     {
         if (existingComponentToUpdate == nullptr){
             TextButton* btn = new TextButton{"play in Deck2"};
@@ -122,7 +132,7 @@ Component *  PlayListComponent::refreshComponentForCell (int rowNumber, int colu
         }
     }
     
-    if (columnId == 4)
+    if (columnId == 5)
     {
         if (existingComponentToUpdate == nullptr){
             TextButton* btn = new TextButton{"Remove"};
@@ -160,7 +170,6 @@ void PlayListComponent::buttonClicked (Button * button)
     {
         int songID = std::stoi(button->getComponentID().toStdString()) - 1000;
         deckGUI1->playFromList(playlist[songID]);
-        deckGUI1->setPos(0.0);
         
     }
     

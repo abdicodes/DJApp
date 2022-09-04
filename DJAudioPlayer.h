@@ -34,6 +34,8 @@ class DJAudioPlayer : public AudioSource {
 
     /** get the relative position of the playhead */
     double getPositionRelative();
+    double getCurrentPosition();
+    double getTotalLength();
 
 private:
     AudioFormatManager& formatManager;

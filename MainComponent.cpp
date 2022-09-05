@@ -31,8 +31,20 @@ MainComponent::MainComponent()
     addAndMakeVisible(deckGUI1); 
     addAndMakeVisible(deckGUI2);
     addAndMakeVisible(playListComponent);
-
     formatManager.registerBasicFormats();
+    
+    getLookAndFeel().setColour(TextEditor::textColourId,Colours::black);
+    getLookAndFeel().setColour(TextEditor::backgroundColourId,Colours::pink);
+    getLookAndFeel().setColour(TextButton::buttonColourId,Colour::fromRGB(255, 210, 210));
+    getLookAndFeel().setColour(ListBox::backgroundColourId, Colours::pink);
+    getLookAndFeel().setColour(TextButton::textColourOffId, Colours::black);
+    getLookAndFeel().setColour(ResizableWindow::backgroundColourId, Colours::pink);
+    getLookAndFeel().setColour(Slider::backgroundColourId, Colours::hotpink);
+    getLookAndFeel().setColour(Slider::thumbColourId, Colours::palevioletred);
+    getLookAndFeel().setColour(Slider::trackColourId, Colours::mediumvioletred);
+    getLookAndFeel().setColour(Slider::rotarySliderFillColourId, Colours::mediumvioletred);
+    getLookAndFeel().setColour(Slider::rotarySliderOutlineColourId, Colours::hotpink);
+    
 }
 
 MainComponent::~MainComponent()

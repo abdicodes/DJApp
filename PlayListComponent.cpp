@@ -17,7 +17,7 @@ PlayListComponent::PlayListComponent(DJAudioPlayer* _player, DeckGUI* _deckGUI1,
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     tableComponent.getHeader().addColumn("Track Title", 1, int (150));
-    tableComponent.getHeader().addColumn("File Path", 2, int (150));
+    tableComponent.getHeader().addColumn("File Path", 2, int (200));
     tableComponent.getHeader().addColumn("Duration", 3, int (100));
     tableComponent.getHeader().addColumn(" ", 4, int (110));
     tableComponent.getHeader().addColumn(" ", 5, int (110));
@@ -34,13 +34,12 @@ PlayListComponent::PlayListComponent(DJAudioPlayer* _player, DeckGUI* _deckGUI1,
     loadButton.addListener(this);
     saveButton.addListener(this);
     searchBar.addListener(this);
-    searchBar.setTextToShowWhenEmpty("Search tracks...", juce::Colours::grey);
+    searchBar.setTextToShowWhenEmpty("Search tracks...", juce::Colours::black);
     searchBar.onReturnKey = [this] { search(searchBar.getText()); };
+    
     
     auto filePath = File::getSpecialLocation (File::SpecialLocationType::userHomeDirectory).getChildFile ("playlist.txt");
     std::string line;
-    
-    
     std::ifstream playListFile(filePath.File::getFullPathName().toRawUTF8());
     
     //defensive coding just in case there is issue opening file stream
@@ -76,10 +75,10 @@ void PlayListComponent::paint (juce::Graphics& g)
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
-    g.setColour (juce::Colours::white);
-    g.setFont (12.0f);
-    g.drawText ("PlayListComponent", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+//    g.setColour (juce::Colours::white);
+//    g.setFont (12.0f);
+//    g.drawText ("PlayListComponent", getLocalBounds(),
+//                juce::Justification::centred, true);   // draw some placeholder text
 }
 
 int PlayListComponent::getNumRows ()
@@ -91,9 +90,9 @@ void PlayListComponent::paintRowBackground (Graphics & g, int rowNumber, int wid
     
     if (rowIsSelected)
     {
-        g.fillAll(Colours::orange);
+        g.fillAll(Colours::orchid);
     }
-    else g.fillAll(Colours::darkgoldenrod);
+    else g.fillAll(Colours::plum);
 }
 void PlayListComponent::paintCell (Graphics & g, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
 {
@@ -196,7 +195,6 @@ void PlayListComponent::buttonClicked (Button * button)
         if (myfile.is_open()) {
             for (const File& file:playlist )
             {
-                std::cout << file.getFullPathName() << std::endl;
                 myfile <<file.getFullPathName() << std::endl;
             }
             
@@ -213,6 +211,21 @@ void PlayListComponent::buttonClicked (Button * button)
         int songID =  std::stoi(button->getComponentID().toStdString()) - 3000;
         playlist.remove(songID);
         tableComponent.updateContent();
+        
+        auto filePath = File::getSpecialLocation (File::SpecialLocationType::userHomeDirectory).getChildFile ("playlist.txt");
+        myfile.open(filePath.File::getFullPathName().toRawUTF8());
+        
+        if (myfile.is_open()) {
+            for (const File& file:playlist )
+            {
+                myfile <<file.getFullPathName() << std::endl;
+            }
+            
+            myfile.close();
+        }
+        
+        
+        
     }
    else NULL;
 }
@@ -257,7 +270,6 @@ std::string PlayListComponent::getDuration(File file)
         player->loadURL(URL(file));
         
         std::string output = player->getDuration();
-        std::cout << output << std::endl;
         return output;
     }
     else return "";

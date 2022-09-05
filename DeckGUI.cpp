@@ -47,7 +47,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     addAndMakeVisible(waveformDisplay);
     addAndMakeVisible(playButton);
     addAndMakeVisible(stopButton);
-//    addAndMakeVisible(loadButton);
+    addAndMakeVisible(loadButton);
     addAndMakeVisible(volSlider);
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(posSlider);
@@ -74,16 +74,19 @@ void DeckGUI::paint (Graphics& g)
 
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));   // clear the background
     
-    g.fillAll (juce::Colours::black);   // clear the background
 
 
     g.setColour (Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
-    g.setColour (Colours::white);
+    g.setColour (Colours::black);
     g.setFont (14.0f);
-    g.drawText ("DeckGUI", getLocalBounds(),
-                Justification::centred, true);   // draw some placeholder text
+//    g.drawText ("DeckGUI", getLocalBounds().getX() / 2,getLocalBounds().getY() / 2,
+//                Justification::centred, true);   // draw some placeholder text
+    g.drawText("Volume", getLocalBounds().getWidth() * 0.2, getLocalBounds().getHeight() / 2 - 10 ,getLocalBounds().getWidth() / 8 , getLocalBounds().getHeight() / 10,  Justification::centred, true);
+    
+    g.drawText("Speed", getLocalBounds().getWidth() * 0.7 , getLocalBounds().getHeight() / 2 - 10 ,getLocalBounds().getWidth() / 8 , getLocalBounds().getHeight() / 10,  Justification::centred, true);
+    
 }
 
 void DeckGUI::resized()
@@ -96,13 +99,14 @@ void DeckGUI::resized()
     double margin = getWidth()/ 6;
     playButton.setBounds(0, 0, colW, rowH);
     stopButton.setBounds(colW, 0, colW, rowH);
+    loadButton.setBounds(colW* 2, 0, colW, rowH);
     
     posSlider.setBounds(0 + margin, rowH * 1 , getWidth() - margin * 2, rowH);
     speedSlider.setBounds(getWidth() -  rotarySliderWidth, rowH * 2, rotarySliderWidth, rotarySliderHeight);
     volSlider.setBounds(0, rowH * 2, rotarySliderWidth, rotarySliderHeight);
     
     waveformDisplay.setBounds(0, rowH * 6, getWidth(), rowH * 2);
-//    loadButton.setBounds(0, rowH * 7, getWidth(), rowH);
+    
     
     elapsedTimeButton.setBounds(5, rowH + rowH * 0.2, margin , rowH * 0.6);
     remainingTimeButton.setBounds(getWidth() - margin - 5, rowH + rowH * 0.2, margin, rowH * 0.6);
@@ -187,8 +191,6 @@ void DeckGUI::timerCallback()
                                     
     
 }
-
-
 
 /** takes File object as an argument and plays the file by dereferencing loadURL function in DJAudioPlayer  */
 void DeckGUI::playFromList(File  file)

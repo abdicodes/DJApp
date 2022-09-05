@@ -43,7 +43,7 @@ void WaveformDisplay::paint (Graphics& g)
     g.setColour (Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
-    g.setColour (Colours::orange);
+    g.setColour (Colours::darkmagenta);
     if(fileLoaded)
     {
       audioThumb.drawChannel(g, 
@@ -53,8 +53,9 @@ void WaveformDisplay::paint (Graphics& g)
         0, 
         1.0f
       );
-      g.setColour(Colours::lightgreen);
-      g.drawRect(position * getWidth(), 0, getWidth() / 20, getHeight());
+      g.setColour(Colours::black);
+//      g.drawRect(position * getWidth(), 0, getWidth() / 20, getHeight());
+        g.fillRect(position * getWidth(), 0, getWidth() * 0.005, getHeight());
     }
     else 
     {
